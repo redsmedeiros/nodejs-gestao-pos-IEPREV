@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const adminSchema = new mongoose.Schema({
     name: {
@@ -31,8 +31,9 @@ adminSchema.pre('save', async function(next){
 });
 
 //verify password
-adminSchema.methods.verifyPassword = async function(){
-    
+adminSchema.methods.verifyPassword = async function(enteredPassword){
+  
+    return await bcrypt.compare(enteredPassword, this.password);
 };
 
 //model

@@ -1,4 +1,5 @@
 const express = require('express');
+const isLogin = require('../../middlewares/isLogin');
 const { 
     registerAdmCtrl, 
     loginAdmCtrl, 

@@ -1,61 +1,69 @@
+const asyncHandler = require('express-async-handler');
+const generateToken = require('../../utils/generateToken');
 //model importado
-const Admin = require('../../model/Staff/Admin')
+const Admin = require('../../model/Staff/Admin');
 
 //@desc Register admin
 //@route POST /api/admins/register
 //@acess Private
-const registerAdmCtrl = async(req, res)=>{
+const registerAdmCtrl = asyncHandler(async (req, res)=>{
+     //destruturar variaives do corpo da requisição
+     const { name, email, password } = req.body
 
-    //destruturar variaives do corpo da requisição
-    const { name, email, password } = req.body
-
-    try{
-        //verificar se o email ja foi cadsatrado
-        const adminFound = await Admin.findOne({ email });
-
-        if(adminFound){
-            res.json('Admin já cadastrado');
-            return;
-        }
-
-        //ir no banco de dados e salvar um user
-        const user = await Admin.create({
-            name,
-            email,
-            password
-        })
-
-        res.status(201).json({
-            status: "success",
-            data: user
-        })
-
-    }catch(error){
-
-        res.json(error);
-    }
-
-}
+    
+         //verificar se o email ja foi cadsatrado
+         const adminFound = await Admin.findOne({ email });
+ 
+         if(adminFound){
+             res.json('Admin já cadastrado');
+             return;
+         }
+ 
+         //ir no banco de dados e salvar um user
+         const user = await Admin.create({
+             name,
+             email,
+             password
+         })
+ 
+         res.status(201).json({
+             status: "success",
+             data: user
+         })
+ })
 
 //@desc login admin
 //@route POST /api/v1/admins/login
 //@acess Private
-const loginAdmCtrl = (req, res)=>{
+const loginAdmCtrl = asyncHandler(async (req, res)=>{
 
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
-    try{
+    
+        //pegar o usuario no banco para validar
+        const user = await Admin.findOne({ email });
 
-        res.status(201).json({
-            status: "success",
-            data:""
-        })
-    }catch(error){
+        if(!user){
+            res.json({message: "usuário não encontrado"});
+            return;
+        }
 
-        res.json({error});
-    }
+      
+        if(user && await user.verifyPassword(password)){
 
-}
+            req.userAuth = user;
+
+            res.status(201).json({
+                status: "success",
+                data: generateToken(user._id)
+            })
+        }else{
+            res.json({message: "Login inválido"});
+            return;
+        }
+
+})
+
 
 //@desc Get all admin
 //@route GET /api/v1/admins
