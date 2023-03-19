@@ -4,7 +4,7 @@ const {
     registerAdmCtrl, 
     loginAdmCtrl, 
     getAdminsCtrl, 
-    getAdminCtrl, 
+    getAdminProfileCtrl, 
     updateAdminCtrl, 
     deleteAdminCtrl,
     adminSuspendTeacherCtrl,
@@ -20,8 +20,8 @@ const adminRouter = express.Router("");
 //Rotas
 adminRouter.post("/register", registerAdmCtrl);
 adminRouter.post('/login', loginAdmCtrl);
-adminRouter.get("/", getAdminsCtrl);
-adminRouter.get("/:id", getAdminCtrl);
+adminRouter.get("/", isLogin, getAdminsCtrl);
+adminRouter.get("/profile", isLogin, getAdminProfileCtrl);
 adminRouter.put("/:id", updateAdminCtrl);
 adminRouter.delete("/:id", deleteAdminCtrl);
 adminRouter.put("/suspend/teacher/:id", adminSuspendTeacherCtrl);

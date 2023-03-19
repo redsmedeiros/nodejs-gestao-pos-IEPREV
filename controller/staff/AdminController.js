@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const generateToken = require('../../utils/generateToken');
+const verifyToken = require('../../utils/verifyToken')
 //model importado
 const Admin = require('../../model/Staff/Admin');
 
@@ -28,7 +29,8 @@ const registerAdmCtrl = asyncHandler(async (req, res)=>{
  
          res.status(201).json({
              status: "success",
-             data: user
+             data: user,
+             message: "Admin criado com sucesso"
          })
  })
 
@@ -51,11 +53,13 @@ const loginAdmCtrl = asyncHandler(async (req, res)=>{
       
         if(user && await user.verifyPassword(password)){
 
-            req.userAuth = user;
+            const token = generateToken(user?._id);
 
-            res.status(201).json({
-                status: "success",
-                data: generateToken(user._id)
+            const verify = verifyToken(token);
+            
+            res.json({
+                data: generateToken(user._id),
+                message: "Usuário logado"
             })
         }else{
             res.json({message: "Login inválido"});
@@ -68,16 +72,34 @@ const loginAdmCtrl = asyncHandler(async (req, res)=>{
 //@desc Get all admin
 //@route GET /api/v1/admins
 //@acess Private
-const getAdminsCtrl = (req, res)=> {
+const getAdminsCtrl = asyncHandler(async (req, res)=> {
 
-}
+    const admins = await Admin.find();
+
+    res.json({
+        status: "success",
+        data: admins
+    })
+
+})
 
 //@desc Get single admin
 //@route GET /api/v1/admins/:id
 //@acess Private
-const getAdminCtrl = (req, res)=> {
+const getAdminProfileCtrl = asyncHandler(async (req, res)=> {
 
-}
+    const admin = await Admin.findById(req.userAuth._id).select("-password -createdAt -updatedAt");
+
+    if(!admin){
+        throw new Error('Admin não encontrado');
+    }
+
+    res.json({
+        status: "success",
+        data: admin
+    });
+
+})
 
 //@desc update single admin
 //@route PUT /api/v1/admins/:id
@@ -139,7 +161,7 @@ module.exports = {
     registerAdmCtrl,
     loginAdmCtrl,
     getAdminsCtrl,
-    getAdminCtrl,
+    getAdminProfileCtrl,
     updateAdminCtrl,
     deleteAdminCtrl,
     adminSuspendTeacherCtrl,
