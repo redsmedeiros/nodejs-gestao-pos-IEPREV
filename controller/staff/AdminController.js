@@ -104,9 +104,31 @@ const getAdminProfileCtrl = asyncHandler(async (req, res)=> {
 //@desc update single admin
 //@route PUT /api/v1/admins/:id
 //@acess Private
-const updateAdminCtrl = (req, res)=> {
+const updateAdminCtrl = asyncHandler(async (req, res)=> {
 
-}
+    //pegar os dados atualizados do formulario
+    const { email, name, password } = req.body;
+
+    //verificar se já tem o email cadastrado
+    const emailExist = await Admin.findOne({ email });
+
+    if(emailExist){
+        throw new Error('Email já cadastrado');
+    }
+
+    //salvar as atualizações
+    const adminUpdate = await Admin.findByIdAndUpdate(req.userAuth._id, {
+        name,
+        email,
+        password
+    }, { new: true })
+
+    res.json({
+        success: true,
+        data: adminUpdate,
+        message: 'Admin atualizado com sucesso'
+    })
+})
 
 //@desc delete single admin
 //@route DELETE /api/v1/admins/:id
