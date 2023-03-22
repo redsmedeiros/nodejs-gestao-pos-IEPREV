@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const academicYearSchema = new mongoose.Schema({
     name: {
-        type: string,
+        type: String,
         required: true
     },
     fromYear: {
