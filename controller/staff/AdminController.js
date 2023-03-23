@@ -88,7 +88,7 @@ const getAdminsCtrl = asyncHandler(async (req, res)=> {
 //@acess Private
 const getAdminProfileCtrl = asyncHandler(async (req, res)=> {
 
-    const admin = await Admin.findById(req.userAuth._id).select("-password -createdAt -updatedAt");
+    const admin = await Admin.findById(req.userAuth._id).select("-password -createdAt -updatedAt").populate("academicYears");
 
     if(!admin){
         throw new Error('Admin não encontrado');

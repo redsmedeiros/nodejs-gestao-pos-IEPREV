@@ -10,6 +10,10 @@ const createAcademicyear = asyncHandler(async (req, res)=>{
 
     const academicYear = await AcademicYear.findOne({ name });
 
+    if(academicYear){
+        throw new Error('Ano acadêmico já cadastrado');
+    }
+
     const academicyearCreated = await AcademicYear.create({
         name,
         fromYear,
@@ -17,10 +21,12 @@ const createAcademicyear = asyncHandler(async (req, res)=>{
         createdBy: req.userAuth._id
     })
 
-    if(academicYear){
-        throw new Error('Ano acadêmico já cadastrado');
-    }
+    //salvar o ano academico no usuario
+    const user = await Admin.findById(req.userAuth._id);
+    user.academicYears.push(academicyearCreated._id);
+    await user.save();
 
+   
     res.status(201).json({
         status: 'success',
         message: 'Academic year created successfully',
