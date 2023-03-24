@@ -26,27 +26,27 @@ const ProgramSchema = new Schema({
         }
     },
     createdBy: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Admin",
         required: true
     },
     teachers: [
         {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Theacher",
             default: []
         }
     ],
     students: [
         {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Student",
             default: []
         }
     ],
     subjects: [
         {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Subject",
             default: []
         }

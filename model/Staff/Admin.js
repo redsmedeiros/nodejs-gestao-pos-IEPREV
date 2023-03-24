@@ -37,6 +37,10 @@ const adminSchema = new mongoose.Schema({
     students: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Student"
+    }],
+    program: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Program"
     }]
 }, { timestamps: true}); 
 

@@ -4,6 +4,7 @@ const {globalErrorHandler, notFoundErr} = require('../middlewares/globalErrorHan
 const { academicYearRoute } = require('../routes/academics/academicYearRoute');
 const academicTermRoute = require('../routes/academics/academicTermRoute');
 const classLevelRoute = require('../routes/academics/classLevelRoute');
+const programRoute = require('../routes/academics/programRoute');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use('/api/v1/admins', adminRouter)
 app.use('/api/v1/academic-year', academicYearRoute);
 app.use('/api/v1/academic-term', academicTermRoute);
 app.use('/api/v1/class-level', classLevelRoute);
+app.use('/api/v1/programs', programRoute);
 
 //MIDDLEWARES
 app.use(notFoundErr);
