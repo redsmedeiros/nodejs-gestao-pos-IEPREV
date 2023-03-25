@@ -4,11 +4,11 @@ const expressAsyncHandler = require('express-async-handler');
 
 const createProgramCtrl = expressAsyncHandler(async (req, res)=>{
 
-    const { name, description , duration} = req.boby;
+    const { name, description , duration} = req.body;
 
-    const programFound = await Program.findOne({ name });
+    const programExists = await Program.findOne({ name });
 
-    if(!programFound){
+    if(programExists){
         throw new Error('Programa já cadastrado');
     }
 
@@ -79,9 +79,21 @@ const updateProgramCtrl = expressAsyncHandler(async (req, res)=>{
     });
 })
 
+const deleteProgramCtrl = expressAsyncHandler(async (req, res)=>{
+
+    await Program.findByIdAndDelete(req.params.id);
+
+    res.json({
+        message: 'Deletado com sucessos',
+        status: 'success'
+    })
+
+})
+
 module.exports = {
     createProgramCtrl,
     getProgramsCtrl,
     getSingleProgramCtrl,
-    updateProgramCtrl
+    updateProgramCtrl,
+    deleteProgramCtrl
 }

@@ -5,6 +5,7 @@ const { academicYearRoute } = require('../routes/academics/academicYearRoute');
 const academicTermRoute = require('../routes/academics/academicTermRoute');
 const classLevelRoute = require('../routes/academics/classLevelRoute');
 const programRoute = require('../routes/academics/programRoute');
+const subjectRoute = require('../routes/academics/subjectRoute');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use('/api/v1/academic-year', academicYearRoute);
 app.use('/api/v1/academic-term', academicTermRoute);
 app.use('/api/v1/class-level', classLevelRoute);
 app.use('/api/v1/programs', programRoute);
+app.use('/api/v1/subjects', subjectRoute);
 
 //MIDDLEWARES
 app.use(notFoundErr);

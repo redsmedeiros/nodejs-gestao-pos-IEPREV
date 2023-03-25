@@ -5,15 +5,17 @@ const {
     createProgramCtrl, 
     getProgramsCtrl,
     getSingleProgramCtrl,
-    updateProgramCtrl 
+    updateProgramCtrl,
+    deleteProgramCtrl 
 } = require('../../controller/academics/ProgramsController');
 
 const programRoute = express.Router();
 
 //rotas
-programRoute.post('/', createProgramCtrl);
-programRoute.get('/', getProgramsCtrl);
-programRoute.get('/:id', getSingleProgramCtrl);
-programRoute.put('/:id', updateProgramCtrl)
+programRoute.post('/', isLogin, isAdmin, createProgramCtrl);
+programRoute.get('/', isLogin, isAdmin, getProgramsCtrl);
+programRoute.get('/:id', isLogin, isAdmin, getSingleProgramCtrl);
+programRoute.put('/:id', isLogin, isAdmin, updateProgramCtrl);
+programRoute.delete('/:id', isLogin, isAdmin, deleteProgramCtrl);
 
 module.exports = programRoute;
