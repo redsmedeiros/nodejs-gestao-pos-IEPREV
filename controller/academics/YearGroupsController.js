@@ -42,10 +42,58 @@ const getAllYearGroups = expressAsyncHandler(async (req, res)=>{
 
 const getSingleYearGroup = expressAsyncHandler(async (req, res)=>{
 
+    const yearGroup = await YearGroup.findById(req.params.id);
+
+    if(!yearGroup){
+        throw new Error('Grupo não encontrado');
+    }
+
+    res.json({
+        status: 'success',
+        message: 'Single Group fetched',
+        data: yearGroup
+    });
+
+})
+
+const updateYearGroup = expressAsyncHandler(async (req, res)=>{
+
+    const { name, academicYear } = req.body;
+
+    const yearGroupExists = await YearGroup.findOne({ name });
+
+    if(yearGroupExists){
+        throw new Error('Nome de grupo já cadastrado');
+    }
+
+    const updateYearGroup = await YearGroup.findByIdAndUpdate(req.params.id, {
+        name,
+        academicYear,
+        createdBy: req.userAuth._id
+    }, { new: true });
+
+    res.json({
+        status: "success",
+        message: 'Grupo atualizado com sucesso',
+        data: updateYearGroup
+    });
+
+})
+
+const deleteYearGroup = expressAsyncHandler(async (req, res)=>{
+
+    await YearGroup.findByIdAndDelete(req.params.id);
+
+    res.json({
+        status: 'success',
+        message: 'Grupo deletado com sucesso',
+    });
 })
 
 module.exports = {
     createYearGroup,
     getAllYearGroups,
-    getSingleYearGroup
+    getSingleYearGroup,
+    updateYearGroup,
+    deleteYearGroup
 }

@@ -39,7 +39,7 @@ const TeacherSchema = new moongose.Schema({
     subject: {
         type: moongose.Schema.Types.ObjectId,
         ref: "Subject",
-        required: true
+     
     },
     applicationStatus: {
         type: String,
@@ -49,17 +49,17 @@ const TeacherSchema = new moongose.Schema({
     program: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Program",
-        required: true
+     
     },
     classLevel: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ClassLevel",
-        required: true
+     
     },
     academicYear: {
         type: moongose.Schema.Types.ObjectId,
         ref: "AcademicYear",
-        required: true
+     
     },
     examsCreated: [
         {
@@ -70,12 +70,12 @@ const TeacherSchema = new moongose.Schema({
     createdBy: {
         type: moongose.Schema.ObjectId,
         ref: "Admin",
-        required: true
+     
     },
     academicTerm: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "AcademicTerm",
-        required: true
+     
     }
 }, { timestamps: true});
 
