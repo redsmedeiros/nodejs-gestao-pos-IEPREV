@@ -16,7 +16,7 @@ const {
     adminUnpublishResultsCtrl 
 } = require('../../controller/staff/AdminController')
 
-const adminRouter = express.Router("");
+const adminRouter = express.Router();
 
 //Rotas
 adminRouter.post("/register", registerAdmCtrl);
