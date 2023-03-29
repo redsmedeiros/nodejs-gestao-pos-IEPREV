@@ -1,6 +1,7 @@
 const expressAsyncHandler = require('express-async-handler');
 const Teacher = require('../../model/Staff/Teacher');
-const { hashPassword } = require('../../utils/helpers');
+const { hashPassword, isPasswordMatched } = require('../../utils/helpers');
+const generateToken = require('../../utils/generateToken.js');
 
 const createTeacherCtrl = expressAsyncHandler(async (req, res)=>{
 
@@ -27,6 +28,32 @@ const createTeacherCtrl = expressAsyncHandler(async (req, res)=>{
     })
 })
 
+const teacherLoginCtrl = expressAsyncHandler(async (req, res)=>{
+
+    const { email, password} = req.body;
+
+    const teacher = await Teacher.findOne({ email });
+
+    if(!teacher){
+        throw new Error('Professor não encontrado');
+    }
+
+    const isMatched = await isPasswordMatched(password, teacher?.password);
+
+    if(!isMatched){
+       res.json({ message: 'Senha inválida'});
+       return;
+    }
+
+    res.json({
+        status: 'success',
+        message: 'Professor logado com sucesso',
+        data: generateToken(teacher?._id)
+    })
+
+})
+
 module.exports = {
-    createTeacherCtrl
+    createTeacherCtrl,
+    teacherLoginCtrl
 }
