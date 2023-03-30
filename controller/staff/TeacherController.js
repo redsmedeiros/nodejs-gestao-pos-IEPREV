@@ -53,7 +53,36 @@ const teacherLoginCtrl = expressAsyncHandler(async (req, res)=>{
 
 })
 
+const getAllTeachersAdmin = expressAsyncHandler(async (req, res)=>{
+
+    const teachers = await Teacher.find();
+
+    res.json({
+        status: 'success',
+        message: 'Teacher fetched successfully',
+        data: teachers
+    });
+})
+
+const getSingleTeacherAdmin = expressAsyncHandler(async (req, res)=>{
+
+    const teacher = await Teacher.findById(req.params.id);
+
+    if(!teacher){
+        throw new Error('Professor não encontrado');
+    }
+
+    res.json({
+        status: 'success',
+        message: 'Teacher fetched successfully',
+        data: teacher
+    });
+})
+
 module.exports = {
     createTeacherCtrl,
-    teacherLoginCtrl
+    teacherLoginCtrl,
+    getAllTeachersAdmin,
+    getSingleTeacherAdmin
+    
 }
