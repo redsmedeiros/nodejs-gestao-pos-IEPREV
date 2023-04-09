@@ -79,10 +79,76 @@ const getSingleTeacherAdmin = expressAsyncHandler(async (req, res)=>{
     });
 })
 
+const getTeacherProfile = expressAsyncHandler(async (req, res)=>{
+
+    const teacher = await Teacher.findById(req.userAuth?._id).select('-password -createdAt -updatedAt');
+
+    if(!teacher){
+        throw new Error('Teacher not found');
+    }
+
+    res.status(200).json({
+        status: "success",
+        data: teacher,
+        message: 'Teacher Profile fetched successfullt'
+    });
+
+});
+
+const updateTeacherProfileCtrl = expressAsyncHandler(async (req, res)=>{
+
+    const { email, name, password } = req.body;
+
+    const emailExists = await Teacher.findOne({ email });
+
+    if(emailExists){
+        throw new Error('Email já cadastrado');
+    }
+
+    if(password){
+
+        const teacher = await Teacher.findByIdAndUpdate(req.userAuth._id,
+            {
+                email,
+                password: await hashPassword(password),
+                name
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        res.status(200).json({
+            status: 'success',
+            data: teacher
+        });
+    }else{
+
+        const teacher = await Teacher.findByIdAndUpdate(req.userAuth._id,
+            {
+                email,
+                name
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        )
+
+        res.status(200).json({
+            status: 'success',
+            data: teacher})
+    }
+
+});
+
 module.exports = {
     createTeacherCtrl,
     teacherLoginCtrl,
     getAllTeachersAdmin,
-    getSingleTeacherAdmin
+    getSingleTeacherAdmin,
+    getTeacherProfile,
+    updateTeacherProfileCtrl
     
 }
