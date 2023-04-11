@@ -47,19 +47,13 @@ const TeacherSchema = new moongose.Schema({
         default: "pending"
     },
     program: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Program",
-     
+        type: String
     },
     classLevel: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ClassLevel",
-     
+        type: String
     },
     academicYear: {
-        type: moongose.Schema.Types.ObjectId,
-        ref: "AcademicYear",
-     
+        type: String
     },
     examsCreated: [
         {
@@ -73,9 +67,7 @@ const TeacherSchema = new moongose.Schema({
      
     },
     academicTerm: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "AcademicTerm",
-     
+        type: String
     }
 }, { timestamps: true});
 
