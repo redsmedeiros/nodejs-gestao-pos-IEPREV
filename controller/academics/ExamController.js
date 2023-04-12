@@ -24,7 +24,7 @@ const createExam = expressAsyncHandler(async (req, res)=>{
         academicTerm,
         academicYear,
         classLevel,
-        createdBy,
+        createdBy: req.userAuth?._id,
         duration,
         examDate,
         examStatus,
@@ -47,6 +47,79 @@ const createExam = expressAsyncHandler(async (req, res)=>{
     })
 });
 
+const getAllExams = expressAsyncHandler(async (req, res)=>{
+
+    const exams = await Exam.find();
+
+    res.json({
+        status: 'success',
+        message: 'Exams fetched success',
+        data: exams
+    });
+
+});
+
+const getSingleExam = expressAsyncHandler(async (req, res)=>{
+
+    const exam = await Exam.findById(req.params.id);
+
+    if(!exam){
+        throw new Error('Exam not found');
+    }
+
+    res.json({
+        status: 'success',
+        message: 'Exam fetched success',
+        data: exam
+    })
+});
+
+const updateExam = expressAsyncHandler(async (req, res)=>{
+
+    const { name, description, classLevel, subject, program, academicTerm, duration, examDate, examTime, examType, createdBy, academicYear } = req.body;
+
+    const examExists = await Exam.findOne({ name });
+
+    if(examExists){
+        throw new Error('Exam already exits');
+    }
+
+    const examUpdate = await Exam.findByIdAndUpdate(req.params.id, {
+        name, 
+        description, 
+        classLevel, 
+        subject, 
+        program, 
+        academicTerm, 
+        duration, 
+        examDate, 
+        examTime, 
+        examType, 
+        createdBy, 
+        academicYear
+    }, { new: true });
+
+    res.json({
+        status: 'success',
+        message: 'Exam update success',
+        data: examUpdate
+    })
+})
+
+const deleteExam = expressAsyncHandler(async (req, res)=>{
+
+    await Exam.findByIdAndDelete(req.params.id);
+
+    res.json({
+        status: 'success',
+        message: 'Delete success'
+    });
+});
+
 module.exports = {
-    createExam
+    createExam,
+    getAllExams,
+    getSingleExam,
+    updateExam,
+    deleteExam
 }

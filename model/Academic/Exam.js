@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { schema } = mongoose;
 
-const examSchema = new Schema({
+const examSchema = mongoose.Schema({
     name: {
         type: String,
         required: true  
